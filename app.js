@@ -4,7 +4,7 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-const {ensureDir,writeFile} = require('./utils/generate-file');
+const { ensureDir, writeFile } = require('./utils/generate-file');
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
@@ -14,7 +14,8 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-const questions = [
+// Questions to be asked for all employee types
+const basicQuestions = [
     {
         type: 'input',
         name: 'name',
@@ -31,12 +32,6 @@ const questions = [
         message: "What is the employee's email?"
     },
     {
-        type: 'list',
-        name: 'role',
-        message: "What is the employee's role?",
-        choices: ['Intern', 'Engineer', 'Manager']
-    },
-    {
         type: 'input',
         name: 'school',
         message: "What is the Intern's school?",
@@ -47,20 +42,41 @@ const questions = [
         name: 'github',
         message: "What is the Engineer's Github name?",
         when: (answers) => answers.role === 'Engineer'
-    },
+    }
+];
+
+// copy of the basic questions and prompt to choose the employee role
+let employeeQuestions = JSON.parse(JSON.stringify(basicQuestions));
+// adding the additional questions necessary for an employee
+employeeQuestions = [
     {
-        type: 'input',
-        name: 'officeNumber',
-        message: "What is the Manager's office number?",
-        when: (answers) => answers.role === 'Manager'
-    },
+        type: 'list',
+        name: 'role',
+        message: "What is the employee's role?",
+        choices: ['Engineer', 'Intern']
+    }, ...employeeQuestions,
     {
         type: 'confirm',
         name: 'addNew',
         message: "Would you like to add another employee?"
-    }
-]
-const getEmployees = (employees) => {
+    }];
+
+// copy of the basic questions and the office number for the manager
+let managerQuestions = JSON.parse(JSON.stringify(basicQuestions));
+// adding the additional question necessary for a manager
+managerQuestions.push(
+{
+    type: 'input',
+    name: 'officeNumber',
+    message: "What is the manager's office number?"
+});
+// replaces the word 'employee' with 'manager' for each question
+managerQuestions.forEach(question => {
+    question.message = question.message.replace('employee', 'manager');
+});
+
+// recursive function to get all the employees that the user wishes to add to their team list
+const getEmployees = (questions, employees) => {
     if (!employees) {
         employees = [];
     }
@@ -72,12 +88,12 @@ const getEmployees = (employees) => {
             case 'Engineer':
                 employees.push(new Engineer(data.name, data.id, data.email, data.github));
                 break;
-            case 'Manager':
+            default:
                 employees.push(new Manager(data.name, data.id, data.email, data.officeNumber));
                 break;
         }
-        if (data.addNew){
-            return getEmployees(employees);
+        if (data.addNew || !data.role) {
+            return getEmployees(employeeQuestions, employees);
         } else {
             return employees;
         }
@@ -88,12 +104,23 @@ const getEmployees = (employees) => {
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
 
-getEmployees().then(data => {
+// getEmployees().then(data => {
+//     const dir = './output';
+//     const fileName = 'team'
+//     ensureDir(dir);
+//     writeFile(dir, fileName, render(data));
+// });
+
+getEmployees(managerQuestions).then(data => {
     const dir = './output';
-    const fileName = 'team'
+    const fileName = 'team';
     ensureDir(dir);
-    writeFile(dir,fileName,render(data));
+    writeFile(dir, fileName, render(data));
 });
+
+// console.log(basicQuestions);
+// console.log(employeeQuestions);
+// console.log(managerQuestions);
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
