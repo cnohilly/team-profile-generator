@@ -14,7 +14,8 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-// Questions to be asked for all employee types
+
+// Questions to be asked for all employee types or roles
 const basicQuestions = [
     {
         type: 'input',
@@ -33,9 +34,9 @@ const basicQuestions = [
     }
 ];
 
-// copy of the basic questions and prompt to choose the employee role
+// copy of the basic questions
 let employeeQuestions = JSON.parse(JSON.stringify(basicQuestions));
-// adding the additional questions necessary for an employee
+// adding the additional questions necessary for an employee to the team
 employeeQuestions = [
     {
         type: 'list',
@@ -61,7 +62,7 @@ employeeQuestions = [
         message: "Would you like to add another employee?"
     }];
 
-// copy of the basic questions and the office number for the manager
+// copy of the basic questions
 let managerQuestions = JSON.parse(JSON.stringify(basicQuestions));
 // adding the additional question necessary for a manager
 managerQuestions.push(
@@ -77,10 +78,13 @@ managerQuestions.forEach(question => {
 
 // recursive function to get all the employees that the user wishes to add to their team list
 const getEmployees = (questions, employees) => {
+    // if the function does not have an employees parameter, it creates an empty array
     if (!employees) {
         employees = [];
     }
+    // returns the inquirer promise and loops through the questions passed in
     return inquirer.prompt(questions).then(data => {
+        // switch to create the appropriate employee type
         switch (data.role) {
             case 'Intern':
                 employees.push(new Intern(data.name, data.id, data.email, data.school));
@@ -92,8 +96,10 @@ const getEmployees = (questions, employees) => {
                 employees.push(new Manager(data.name, data.id, data.email, data.officeNumber));
                 break;
         }
+        // if the user choose to add another member or this was the first entry for the manager, the function is called recursively
         if (data.addNew || !data.role) {
             return getEmployees(employeeQuestions, employees);
+        // else the array of employees is returned
         } else {
             return employees;
         }
@@ -104,13 +110,7 @@ const getEmployees = (questions, employees) => {
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
 
-// getEmployees().then(data => {
-//     const dir = './output';
-//     const fileName = 'team'
-//     ensureDir(dir);
-//     writeFile(dir, fileName, render(data));
-// });
-
+// calls the function to prompt the user with inquirer, ensures the desired directory exists and if not creates it, then renders the html and writes it to the output file
 getEmployees(managerQuestions).then(data => {
     const dir = './output';
     const fileName = 'team';
