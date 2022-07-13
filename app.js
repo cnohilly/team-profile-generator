@@ -30,18 +30,6 @@ const basicQuestions = [
         type: 'input',
         name: 'email',
         message: "What is the employee's email?"
-    },
-    {
-        type: 'input',
-        name: 'school',
-        message: "What is the Intern's school?",
-        when: (answers) => answers.role === 'Intern'
-    },
-    {
-        type: 'input',
-        name: 'github',
-        message: "What is the Engineer's Github name?",
-        when: (answers) => answers.role === 'Engineer'
     }
 ];
 
@@ -56,6 +44,18 @@ employeeQuestions = [
         choices: ['Engineer', 'Intern']
     }, ...employeeQuestions,
     {
+        type: 'input',
+        name: 'school',
+        message: "What is the intern's school?",
+        when: (answers) => answers.role === 'Intern'
+    },
+    {
+        type: 'input',
+        name: 'github',
+        message: "What is the engineer's Github name?",
+        when: (answers) => answers.role === 'Engineer'
+    },
+    {
         type: 'confirm',
         name: 'addNew',
         message: "Would you like to add another employee?"
@@ -65,11 +65,11 @@ employeeQuestions = [
 let managerQuestions = JSON.parse(JSON.stringify(basicQuestions));
 // adding the additional question necessary for a manager
 managerQuestions.push(
-{
-    type: 'input',
-    name: 'officeNumber',
-    message: "What is the manager's office number?"
-});
+    {
+        type: 'input',
+        name: 'officeNumber',
+        message: "What is the manager's office number?"
+    });
 // replaces the word 'employee' with 'manager' for each question
 managerQuestions.forEach(question => {
     question.message = question.message.replace('employee', 'manager');
