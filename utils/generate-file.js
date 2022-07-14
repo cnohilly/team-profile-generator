@@ -2,16 +2,17 @@ const fs = require('fs');
 
 // Creating folder if one does not exist
 const ensureDir = (dir) => {
-    if(!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
-        console.log('directory created');
-    } else {
-        console.log('directory already exists');
-    }
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+    console.log('Directory does not exist. Creating director.');
+  } else {
+    console.log('Desired directory already exists.');
+  }
 }
 
 // writing files
-const writeFile = (dir,name,fileContent) => {
+const writeFile = (dir, name, fileContent) => {
+  ensureDir(dir);
   return new Promise((resolve, reject) => {
     fs.writeFile(`${dir}/${name}.html`, fileContent, err => {
       if (err) {
@@ -27,4 +28,4 @@ const writeFile = (dir,name,fileContent) => {
   });
 };
 
-module.exports =  {ensureDir, writeFile} ;
+module.exports = writeFile;

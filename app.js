@@ -4,7 +4,7 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-const { ensureDir, writeFile } = require('./utils/generate-file');
+const  writeFile = require('./utils/generate-file');
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
@@ -114,7 +114,6 @@ const getEmployees = (questions, employees) => {
 getEmployees(managerQuestions).then(data => {
     const dir = './output';
     const fileName = 'team';
-    ensureDir(dir);
     writeFile(dir, fileName, render(data));
 });
 
