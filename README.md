@@ -1,10 +1,8 @@
 # 10 Object-Oriented Programming: Team Profile Generator
 
-Your challenge is to build a Node.js command-line application that takes in information about employees on a software engineering team and generates an HTML webpage that displays summaries for each person. Because testing is key to making code maintainable, you’ll also write unit tests for each part of your code and ensure that it passes all of them.
+This project was to build a command-line application using inquirer to take information from a user to build their development team and provide information for each team member. The application starts by asking for the information for the team manager, then proceeds to ask for information for each engineer or intern for the team. After all the team members have been submitted, an HTML webpage is generated to display the team in their own individual cards with their information. 
 
-Because this application won’t be deployed, you’ll also need to provide a link to a walkthrough video that demonstrates its functionality and all of the tests passing. You’ll need to submit a link to the video **and** add it to the README of your project.
-
-**Note**: There is no starter code for this assignment.
+**Note**: Much of the code used in this project was supplied by the instructor.
 
 ## User Story
 
@@ -43,89 +41,26 @@ The following image shows the generated HTML’s appearance and functionality. T
 ![HTML webpage titled “My Team” features five boxes listing employee names, titles, and other key info.](./Assets/10-object-oriented-programming-homework-demo.png)
 
 
-## Getting Started
+## Product
 
-This Challenge will combine many of the skills you’ve learned over the first ten weeks of this course. To help you get started, we’ve provided some guidelines in addition to the User Story and Acceptance Criteria.
-
-Your application should use [Jest](https://www.npmjs.com/package/jest) to run the unit tests and [Inquirer](https://www.npmjs.com/package/inquirer) to collect input from the user. The application will be invoked by using the following command:
+The application can be run by using the following command:
 
 ```bash
 node index.js
 ```
 
-It is recommended that you start with a directory structure that looks like this:
+Demonstration of the application can be seen in this video: [Team Profile Generator Demo](https://youtu.be/JYsSgNNiTDA)
 
-```md
-.
-├── __tests__/             //jest tests
-│   ├── Employee.test.js
-│   ├── Engineer.test.js
-│   ├── Intern.test.js
-│   └── Manager.test.js
-├── dist/                  // rendered output (HTML) and CSS style sheet
-├── lib/                   // classes
-├── src/                   // template helper code
-├── .gitignore             // indicates which folders and files Git should ignore
-├── index.js               // runs the application
-└── package.json
-```
+GIF of demonstration:
 
-**Important**: Make sure that you remove `dist` from the `.gitignore` file so that Git will track this folder and include it when you push up to your application's repository.
+![GIF of the video demonstrating the application](./Assets/Team%20Profile%20Generator%20Demo.gif)
 
-The application must have these classes: `Employee`, `Manager`, `Engineer`, and `Intern`. The tests for these classes (in the `_tests_` directory) **must all pass**.
+Image of tests passing: 
 
-The first class is an `Employee` parent class with the following properties and methods:
+![All tests passing for application](./Assets/passing-tests.jpg)
 
-* `name`
+Example of application:
 
-* `id`
-
-* `email`
-
-* `getName()`
-
-* `getId()`
-
-* `getEmail()`
-
-* `getRole()`   // Returns 'Employee'
-
-The other three classes will extend `Employee`.
-
-In addition to `Employee`'s properties and methods, `Manager` will also have:
-
-* `officeNumber`
-
-* `getRole()`   // Overridden to return `Manager`
-
-In addition to `Employee`'s properties and methods, `Engineer` will also have:
-
-* `github`  // GitHub username
-
-* `getGithub()`
-
-* `getRole()`   // Overridden to return `Engineer`
-
-In addition to `Employee`'s properties and methods, `Intern` will also have:
-
-* `school`
-
-* `getSchool()`
-
-* `getRole()`   // Overridden to return `Intern`
-
-Finally, although it’s not a requirement, you should consider adding validation to ensure that the user input provided is in the proper expected format.
+![Example of running the application and entering information](./Assets/application-example.jpg)
 
 
-## Review
-
-You are required to submit the following for review:
-
-* A walkthrough video demonstrating the functionality of the application and passing tests.
-
-* A sample HTML file generated using your application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
-
-- - -
-© 2022 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.

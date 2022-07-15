@@ -6,6 +6,10 @@ const writeFile = require('./utils/generate-file');
 
 const render = require("./lib/htmlRenderer");
 
+// directory and filename 
+const dir = './output';
+const fileName = 'team';
+
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
@@ -113,8 +117,6 @@ const getEmployees = (questions, employees) => {
 // calls the function to prompt the user with inquirer, ensures the desired directory exists and if not creates it, then renders the html and writes it to the output file
 // write file response is output for the user
 getEmployees(managerQuestions).then(data => {
-    const dir = './output';
-    const fileName = 'team';
     return writeFile(dir, fileName, render(data));
 }).then(writeFileResponse => {
     console.log(writeFileResponse.message);
