@@ -2,12 +2,7 @@ const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
-const path = require("path");
-const fs = require("fs");
-const  writeFile = require('./utils/generate-file');
-
-const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
+const writeFile = require('./utils/generate-file');
 
 const render = require("./lib/htmlRenderer");
 
@@ -34,16 +29,15 @@ const basicQuestions = [
     }
 ];
 
-// copy of the basic questions
-let employeeQuestions = JSON.parse(JSON.stringify(basicQuestions));
-// adding the additional questions necessary for an employee to the team
+// duplicates basic questions and adds additional questions necessary for team members
+// JSON parse and stringify used to make a deep copy of questions
 employeeQuestions = [
     {
         type: 'list',
         name: 'role',
         message: "What is the employee's role?",
         choices: ['Engineer', 'Intern']
-    }, ...employeeQuestions,
+    }, ...JSON.parse(JSON.stringify(basicQuestions)),
     {
         type: 'input',
         name: 'school',
@@ -62,15 +56,14 @@ employeeQuestions = [
         message: "Would you like to add another employee?"
     }];
 
-// copy of the basic questions
-let managerQuestions = JSON.parse(JSON.stringify(basicQuestions));
-// adding the additional question necessary for a manager
-managerQuestions.push(
-    {
-        type: 'input',
-        name: 'officeNumber',
-        message: "What is the manager's office number?"
-    });
+// duplicates basic questions and adds additional questions necessary for team manager
+// JSON parse and stringify used to make a deep copy of questions
+let managerQuestions = [...JSON.parse(JSON.stringify(basicQuestions)),
+{
+    type: 'input',
+    name: 'officeNumber',
+    message: "What is the manager's office number?"
+}];
 // replaces the word 'employee' with 'manager' for each question
 managerQuestions.forEach(question => {
     question.message = question.message.replace('employee', 'manager');
@@ -110,19 +103,15 @@ const getEmployees = (questions, employees) => {
         // if the user choose to add another member or this was the first entry for the manager, the function is called recursively
         if (data.addNew || !data.role) {
             return getEmployees(employeeQuestions, employees);
-        // else the array of employees is returned
+            // else the array of employees is returned
         } else {
             return employees;
         }
     });
 };
 
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
 // calls the function to prompt the user with inquirer, ensures the desired directory exists and if not creates it, then renders the html and writes it to the output file
-
+// write file response is output for the user
 getEmployees(managerQuestions).then(data => {
     const dir = './output';
     const fileName = 'team';
@@ -133,9 +122,9 @@ getEmployees(managerQuestions).then(data => {
     console.log(err);
 });
 
-// console.log(basicQuestions);
-// console.log(employeeQuestions);
-// console.log(managerQuestions);
+// After the user has input all employees desired, call the `render` function (required
+// above) and pass in an array containing all employee objects; the `render` function will
+// generate and return a block of HTML including templated divs for each employee!
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the

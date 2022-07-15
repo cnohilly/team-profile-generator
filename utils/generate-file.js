@@ -4,9 +4,9 @@ const fs = require('fs');
 const ensureDir = (dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
-    console.log('Directory does not exist. Creating director.');
+    console.log('Output directory does not exist. Creating directory.');
   } else {
-    console.log('Desired directory already exists.');
+    console.log('Output directory already exists.');
   }
 }
 
