@@ -81,6 +81,17 @@ const getEmployees = (questions, employees) => {
     // if the function does not have an employees parameter, it creates an empty array
     if (!employees) {
         employees = [];
+        console.log(`
+        ----------------------
+        - Enter Team Manager -
+        ----------------------
+        `)
+    } else {
+        console.log(`
+        -------------------------
+        - Enter New Team Member -
+        -------------------------
+        `)
     }
     // returns the inquirer promise and loops through the questions passed in
     return inquirer.prompt(questions).then(data => {
@@ -111,10 +122,15 @@ const getEmployees = (questions, employees) => {
 // generate and return a block of HTML including templated divs for each employee!
 
 // calls the function to prompt the user with inquirer, ensures the desired directory exists and if not creates it, then renders the html and writes it to the output file
+
 getEmployees(managerQuestions).then(data => {
     const dir = './output';
     const fileName = 'team';
-    writeFile(dir, fileName, render(data));
+    return writeFile(dir, fileName, render(data));
+}).then(writeFileResponse => {
+    console.log(writeFileResponse.message);
+}).catch(err => {
+    console.log(err);
 });
 
 // console.log(basicQuestions);
