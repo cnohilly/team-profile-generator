@@ -63,4 +63,8 @@ Example of application:
 
 ![Example of running the application and entering information](./Assets/application-example.jpg)
 
+Example of generated webpage:
+
+![Webpage generated when running the application](./Assets/generated-webpage.jpg)
+
 
